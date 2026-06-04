@@ -56,7 +56,7 @@ Make sure you have Docker installed and verify it is running with `docker ps`. N
 
 If using Linux and you see an error similar to `permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock` then make sure you are in the `docker` group. This will ensure that you are able to run Docker without using the `sudo` command.
 ```sh
-$ sudo usermod -aG docker <username>
+sudo usermod -aG docker <username>
 ```
 Logout and then login again for the changes to take effect.
 
@@ -96,19 +96,19 @@ These instructions assume that you are using a local `k3d`. If you plan to use a
 
 1. Clone the TNS repository.
     ```sh
-    $ git clone https://github.com/grafana/tns
-    $ cd tns
+    git clone https://github.com/grafana/tns
+    cd tns
     ```
 
 1. Install K3D cluster.
     ```sh
-    $ ./create-k3d-cluster
-    $ export KUBECONFIG=$(k3d kubeconfig write tns)
+    ./create-k3d-cluster
+    export KUBECONFIG=$(k3d kubeconfig write tns)
     ```
 
 1. Install TNS demo application:
     ```sh
-    $ ./install
+    ./install
     ```
 
 1. Confirm `yes` when prompted. You will be prompted five times during the installation.
@@ -118,7 +118,7 @@ These instructions assume that you are using a local `k3d`. If you plan to use a
 1. Verify the status of your cluster by running this command.
 
     ```sh
-    $ kubectl get pods -A
+    kubectl get pods -A
     ```
     If all the pods are listed as either `running` or `completed`, your cluster is ready for use.
 
@@ -132,13 +132,13 @@ If you already have a K8s cluster *and* cloud metrics, logs, and traces services
 
 1. Get Kubernetes context
     ```sh
-    $ kubectl config get-contexts
+    kubectl config get-contexts
     ```
     Note down the context you'd like to use to deploy the app.
 
 1. Deploy the app
     ```sh
-    $ ./install CONTEXT_YOU_NOTED app-only
+    ./install CONTEXT_YOU_NOTED app-only
     ```
 
 1. Confirm `yes` when prompted.
@@ -146,7 +146,7 @@ If you already have a K8s cluster *and* cloud metrics, logs, and traces services
 1. Verify the status of your cluster by running this command.
 
     ```sh
-    $ kubectl get pods -n tns-cloud
+    kubectl get pods -n tns-cloud
     ```
     If all the pods are listed as either `running`, your app is ready for use.
 
@@ -156,13 +156,13 @@ Note: this requires an existing K8S cluster.
 
 1. Get Kubernetes context
     ```sh
-    $ kubectl config get-contexts
+    kubectl config get-contexts
     ```
     Note down the context you'd like to use to deploy the app.
 
 1. Deploy the app
     ```sh
-    $ ./install CONTEXT_YOU_NOTED grafana-cloud
+    ./install CONTEXT_YOU_NOTED grafana-cloud
     ```
 
 1. You will need to provide your organization name (slug), API Token, and stack.
@@ -178,7 +178,7 @@ Note: this requires an existing K8S cluster.
 1. Verify the status of your cluster by running this command.
 
     ```sh
-    $ kubectl get pods -n tns-cloud
+    kubectl get pods -n tns-cloud
     ```
 	If all the pods are listed as either `running`, your app is ready for use.
 
@@ -203,6 +203,7 @@ The following instructions will help you go from metrics to traces to logs.
 
 1. In Grafana, go to the Explore view.
 1. From the data source drop-down, select Mimir.
+1. If the query editor opens in **Builder** mode, click the **Code** toggle in the upper-right of the query editor.
 1. Run the following query: `histogram_quantile(.99, sum(rate(tns_request_duration_seconds_bucket{}[1m])) by (le))`
 1. Click on a data point to see the exemplar data in an overlay, then click "Query with Tempo" in the examplar overlay. (If no data points appear, make sure exemplars are enabled in the query options.)
 1. In the trace viewer, click the log icon of one of the span lines to view log details.
@@ -211,6 +212,7 @@ The following instructions will help you go from metrics to traces to logs.
 
 1. In Grafana, go to the Explore view.
 1. From the data source drop-down, select Loki.
+1. If the query editor opens in **Builder** mode, click the **Code** toggle in the upper-right of the query editor.
 1. Run the following query: `{job="tns/app"} | logfmt | level="info" | status>=500 and status <=599 and duration > 50ms`
 1. Click to expand a logline with a `TraceID` field.
 1. Click the Tempo button next to the `TraceID` field to view the trace.
@@ -220,13 +222,13 @@ The following instructions will help you go from metrics to traces to logs.
 To disable your cluster, run this command:
 
 ```sh
-$ k3d cluster stop tns
+k3d cluster stop tns
 ```
 
 To re-enable the cluster, run this command:
 
 ```sh
-$ k3d cluster start tns
+k3d cluster start tns
 ```
 
 ## Remove TNS cluster
@@ -234,8 +236,8 @@ $ k3d cluster start tns
 To remove your cluster, run this command:
 
 ```sh
-$ k3d cluster delete tns
-$ rm -rf tanka
+k3d cluster delete tns
+rm -rf tanka
 ```
 
 ## Contributing guidelines
