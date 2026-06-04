@@ -257,9 +257,13 @@ func (a *app) Post(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Implement PRG pattern to prevent double-POST.
-	newURL := strings.TrimSuffix(req.RequestURI, "/post")
-	http.Redirect(w, req, newURL, http.StatusFound)
+	// Implement PRG pattern to prevent double-POST. Use a relative redirect
+	// ("./") so the browser resolves it against the URL it actually requested,
+	// preserving scheme, host, port and any reverse-proxy path prefix (e.g.
+	// /tns-demo/). http.Redirect would rewrite this to a host-rooted "/", which
+	// a proxy then re-absolutizes against $host — dropping the :8080 port.
+	w.Header().Set("Location", "./")
+	w.WriteHeader(http.StatusFound)
 }
 
 func (a *app) Vote(w http.ResponseWriter, r *http.Request) {
@@ -314,7 +318,11 @@ func (a *app) Vote(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Implement PRG pattern to prevent double-POST.
-	newURL := strings.TrimSuffix(req.RequestURI, "/vote")
-	http.Redirect(w, req, newURL, http.StatusFound)
+	// Implement PRG pattern to prevent double-POST. Use a relative redirect
+	// ("./") so the browser resolves it against the URL it actually requested,
+	// preserving scheme, host, port and any reverse-proxy path prefix (e.g.
+	// /tns-demo/). http.Redirect would rewrite this to a host-rooted "/", which
+	// a proxy then re-absolutizes against $host — dropping the :8080 port.
+	w.Header().Set("Location", "./")
+	w.WriteHeader(http.StatusFound)
 }
