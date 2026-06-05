@@ -20,9 +20,8 @@ import (
 
 	"github.com/go-kit/log"
 	"github.com/go-kit/log/level"
-	"github.com/weaveworks/common/logging"
-	"github.com/weaveworks/common/server"
-	"github.com/weaveworks/common/tracing"
+	"github.com/grafana/dskit/server"
+	"github.com/grafana/dskit/tracing"
 
 	"github.com/grafana/tns/client"
 )
@@ -35,8 +34,8 @@ func main() {
 	flag.Parse()
 
 	// Use a gokit logger, and tell the server to use it.
-	logger := level.NewFilter(log.NewLogfmtLogger(log.NewSyncWriter(os.Stdout)), serverConfig.LogLevel.Gokit)
-	serverConfig.Log = logging.GoKit(logger)
+	logger := level.NewFilter(log.NewLogfmtLogger(log.NewSyncWriter(os.Stdout)), serverConfig.LogLevel.Option)
+	serverConfig.Log = logger
 
 	// Setting the environment variable JAEGER_AGENT_HOST enables tracing
 	trace, err := tracing.NewFromEnv("app")
